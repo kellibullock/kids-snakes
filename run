@@ -1,0 +1,14 @@
+#!/bin/bash
+
+TARGET="snakes"
+
+gyp snakes.gyp --depth=. -f make --generator-output=./build/makefiles
+
+echo "Compiling..."
+make -C ./build/makefiles/ "$TARGET"
+if [ $? -ne 0 ]; then
+  exit 1
+fi
+
+echo "### Running $1 ###"
+./build/makefiles/out/Default/"$TARGET"
