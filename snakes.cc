@@ -23,6 +23,7 @@ struct Block {
   int y;
 };
 
+std::vector<const float*> snake_color{kColorWhite, kColorBlack};
 std::vector<int> direction{0, 0};
 std::vector<std::vector<Block>> snake{{{0, 0}}, {{0, 0}}};
 
@@ -65,6 +66,18 @@ void Timer(int value) {
 
     snake[i].erase(snake[i].begin());
     snake[i].push_back(new_block);
+  }
+
+  for (auto b : snake[0]) {
+    if (snake[1].back().x == b.x && snake[1].back().y == b.y) {
+      in_game = false;
+    }
+  }
+
+  for (auto b : snake[1]) {
+    if (snake[0].back().x == b.x && snake[0].back().y == b.y) {
+      in_game = false;
+    }
   }
 
   if (in_game) {
@@ -126,7 +139,7 @@ void Display() {
   if (in_game) {
     for (int i = 0; i < 2; i++) {
       for (auto b : snake[i]) {
-        draw_rectangle(b.x, b.y, kColorWhite);
+        draw_rectangle(b.x, b.y, snake_color[i]);
       }
     }
   } else {
