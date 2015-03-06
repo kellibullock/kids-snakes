@@ -1,9 +1,14 @@
+#if __APPLE__
+#include <GLUT/glut.h>
+#else
 #include <GL/glut.h>
+#endif
 #include <cmath>
 #include <cstdio>
+#include <cstdlib>
 #include <memory>
-#include <vector>
 #include <string>
+#include <vector>
 
 constexpr float kColorBlack[] = {0, 0, 0};
 constexpr float kColorWhite[] = {1, 1, 1};
@@ -172,7 +177,7 @@ void ScreenResized(int w, int h) {
 }
 
 int main(int argc, char** argv) {
-  srand(time(nullptr));
+  srand((unsigned)time(nullptr));
 
   glutInit(&argc, argv);
   glutInitWindowSize(1000, 800);
