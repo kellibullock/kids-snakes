@@ -32,6 +32,8 @@ std::vector<const float*> snake_color{kColorWhite, kColorBlack};
 std::vector<int> direction{0, 0};
 std::vector<std::vector<Block>> snake{{{0, 0}}, {{0, 0}}};
 
+Block food{20,20};
+
 void draw_rectangle(int x, int y, const float* color) {
   const GLdouble x_begin = -1.0 + x * 0.05;
   const GLdouble y_begin = -1.0 + y * 0.05;
@@ -64,12 +66,18 @@ void Timer(int value) {
         break;
     }
 
+    // Check if we collide with a wall.
     if (new_block.y == -1 || new_block.y == 40 || new_block.x == -1 ||
         new_block.x == 40) {
       in_game = false;
     }
 
-    snake[i].erase(snake[i].begin());
+    // If we get food, don't erase block[0]. (Snake gets bigger when we eat food.)
+    if (!(new_block.x == food.x && new_block.y == food.y)) {
+      snake[i].erase(snake[i].begin());
+    }
+    
+    // Add the new block at the back of the array (The snake is moving!)
     snake[i].push_back(new_block);
   }
 
@@ -142,11 +150,15 @@ void Display() {
   glEnd();
 
   if (in_game) {
+    // Draw both snakes.
     for (int i = 0; i < 2; i++) {
       for (auto b : snake[i]) {
         draw_rectangle(b.x, b.y, snake_color[i]);
       }
     }
+    
+    // Draw the food block.
+    draw_rectangle(food.x, food.y, kColorRed);
   } else {
     // There is something not quite right about this...
     const char* str = "Press n";
