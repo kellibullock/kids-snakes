@@ -77,6 +77,8 @@ void Timer(int value) {
     // If we get food, don't erase block[0]. (Snake gets bigger when we eat food.)
     if (!(new_block.x == food.x && new_block.y == food.y)) {
       snake[i].erase(snake[i].begin());
+    } else {
+      food = {rand() % 40, rand() % 40};
     }
     
     // Add the new block at the back of the array (The snake is moving!)
