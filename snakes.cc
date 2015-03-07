@@ -83,20 +83,37 @@ void Timer(int value) {
     snake[i].push_back(new_block);
   }
 
+  // Check if snake 1 hits snake 0.
   for (auto b : snake[0]) {
     if (snake[1].back().x == b.x && snake[1].back().y == b.y) {
       loses[1] = true;
     }
   }
 
+  // Check if snake 0 hits itself.
+  for (auto b = snake[0].begin(); b != snake[0].end() - 1; b++) {
+    if (snake[0].back().x == b->x && snake[0].back().y == b->y) {
+      loses[0] = true;
+    }
+  }
+
+  // Check if snake 0 hits snake 1.
   for (auto b : snake[1]) {
+    // Check if snake 0 hits snake 1.
     if (snake[0].back().x == b.x && snake[0].back().y == b.y) {
       loses[0] = true;
     }
   }
   
+  // Check if snake 1 hits itself.
+  for (auto b = snake[1].begin(); b != snake[1].end() - 1; b++) {
+    if (snake[1].back().x == b->x && snake[1].back().y == b->y) {
+      loses[1] = true;
+    }
+  }
+  
   if (loses[1]) {
-    snake[1] = {{33, 35}, {34, 35}, {35, 35}};
+    snake[1] = {{37, 35}, {36, 35}, {35, 35}};
     direction[1] = GLUT_KEY_LEFT;
   }
   if (loses[0]) {
@@ -122,7 +139,7 @@ void KeyPressed(unsigned char key, int x, int y) {
     in_game = true;
     snake[0] = {{3, 5}, {4, 5}, {5, 5}};
     direction[0] = GLUT_KEY_RIGHT;
-    snake[1] = {{33, 35}, {34, 35}, {35, 35}};
+    snake[1] = {{37, 35}, {36, 35}, {35, 35}};
     direction[1] = GLUT_KEY_LEFT;
     glutTimerFunc(speed, Timer, 0);
   }
