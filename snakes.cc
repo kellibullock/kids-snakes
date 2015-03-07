@@ -48,6 +48,8 @@ void draw_rectangle(int x, int y, const float* color) {
 }
 
 void Timer(int value) {
+  bool loses[2] = {false, false};
+  
   for (int i = 0; i < 2; i++) {
     Block new_block = snake[i].back();
 
@@ -69,7 +71,7 @@ void Timer(int value) {
     // Check if we collide with a wall.
     if (new_block.y == -1 || new_block.y == 40 || new_block.x == -1 ||
         new_block.x == 40) {
-      in_game = false;
+      loses[i] = true;
     }
 
     // If we get food, don't erase block[0]. (Snake gets bigger when we eat food.)
@@ -83,14 +85,23 @@ void Timer(int value) {
 
   for (auto b : snake[0]) {
     if (snake[1].back().x == b.x && snake[1].back().y == b.y) {
-      in_game = false;
+      loses[1] = true;
     }
   }
 
   for (auto b : snake[1]) {
     if (snake[0].back().x == b.x && snake[0].back().y == b.y) {
-      in_game = false;
+      loses[0] = true;
     }
+  }
+  
+  if (loses[1]) {
+    snake[1] = {{33, 35}, {34, 35}, {35, 35}};
+    direction[1] = GLUT_KEY_LEFT;
+  }
+  if (loses[0]) {
+    snake[0] = {{3, 5}, {4, 5}, {5, 5}};
+    direction[0] = GLUT_KEY_RIGHT;
   }
 
   if (in_game) {
